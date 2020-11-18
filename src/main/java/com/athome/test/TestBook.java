@@ -22,7 +22,7 @@ public class TestBook {
           bookContoller.buy();
  //       bookContoller.buy2();
 //        DruidDataSource dataSource = ct.getBean("dataSource", DruidDataSource.class);
-//        System.out.println(dataSource);
+               //System.out.println(dataSource);
 
 //        JdbcTemplate jdbcTemplate = ct.getBean("jdbcTemplate", JdbcTemplate.class);
 //        System.out.println(jdbcTemplate);

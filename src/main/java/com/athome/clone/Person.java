@@ -66,7 +66,7 @@ public class Person implements Serializable, Cloneable {
         p2.setAddress("北京市", "朝阳区");
         System.out.println(person);
         System.out.println(p2);
-        //
+        //cc
     }
 
 

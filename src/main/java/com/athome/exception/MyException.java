@@ -5,7 +5,7 @@ package com.athome.exception;
  * @Dat 2020-11-16 9:54
  * @Describe
  */
-public class MyException extends RuntimeException {
+public class MyException extends Exception {
 
     public MyException() {
         super();

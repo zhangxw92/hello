@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
  * @Dat 2020-11-14 16:50
  * @Describe
  */
-@Repository
 public class AccountDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;

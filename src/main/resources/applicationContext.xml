@@ -2,108 +2,67 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        https://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd">
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd
+       http://mybatis.org/schema/mybatis-spring
+       http://mybatis.org/schema/mybatis-spring.xsd">
 
-  <!--开启aspectJ的自动代理功能-->
-  <aop:aspectj-autoproxy/>
-  <!--Spring使用注解的方式扫描bean组件-->
-  <!--use-default-filters为false代表一个都不扫描，配合include使用-->
-  <context:component-scan base-package="com.athome" use-default-filters="true">
-    <!--只扫描包含Controller这个注解的bean-->
-    <!--
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:include-filter>
-    -->
-    <!--扫描的时候排除掉Repository这个注解的bean-->
-    <!--
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"></context:exclude-filter>
-    -->
-  </context:component-scan>
-  <!--  <bean id="user" class="com.athome.User">
-    <constructor-arg value="11"></constructor-arg>
-    <constructor-arg value="zhangdan"></constructor-arg>
-    <constructor-arg value="33"></constructor-arg>
-    <constructor-arg value="北京市"></constructor-arg>
-  </bean>
+    <!--开启aspectJ的自动代理功能-->
+    <aop:aspectj-autoproxy/>
+    <!--Spring使用注解的方式扫描bean组件-->
+    <!--use-default-filters为false代表一个都不扫描，配合include使用-->
+    <context:component-scan base-package="com.athome" use-default-filters="true">
+        <!--只扫描包含Controller这个注解的bean-->
+        <!--
+            <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:include-filter>
+        -->
+        <!--扫描的时候排除掉Repository这个注解的bean-->
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
 
-  <bean id="user1" class="com.athome.User">
-    <constructor-arg value="11"></constructor-arg>
-    <constructor-arg value="zhangdan"></constructor-arg>
-    <constructor-arg value="33"></constructor-arg>
-    <constructor-arg value="北京市"></constructor-arg>
-    <constructor-arg value="90" index="4" type="java.lang.Double"></constructor-arg>
-  </bean>-->
-
-  <!--  <bean id="user2" class="com.athome.User">
-      <property name="name" value="11"></property>
-      <property name="id" value="66"></property>
-      <property name="age" value="33"></property>
-      <property name="address" value="北京市"></property>
-      <property name="score" value="90"></property>
-      <property name="pen">
-        <list>
-          <value>黄色</value>
-          <value>蓝色</value>
-        </list>
-      </property>
-      <property name="map">
-        <map>
-          <entry key="1" value="a"></entry>
-          <entry key="2" value="b"></entry>
-        </map>
-      </property>
-    </bean>-->
-
-  <!--  <bean id="springTest" class="com.athome.SpringTest" init-method="a" destroy-method="b">
-      <property name="name" value="zhangsan"></property>
-    </bean>-->
-  <!--  <bean id="a" class="com.athome.A" scope="singleton">
-      <property name="b" ref="b"></property>
-      <property name="name" value="zhansan"></property>
+    <!--数据库连接池，以下几个属性名一定要写正确！！！！！！！！！！！！-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
     </bean>
-    <bean id="b" class="com.athome.B" scope="singleton">
-      <property name="bid" value="333"></property>
-      <property name="aas">
-        <list>
-          <value>au</value>
-          <value>au1</value>
-          <value>au2</value>
-        </list>
-      </property>
-    </bean>-->
-  <!--  <bean id="hello" class="com.athome.Hello">
-      <property name="name" value="Spring"></property>
-    </bean>-->
+    <!--加载数据库配置文件-->
+    <!--  <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="location" value="db.properties"></property>
+      </bean>-->
+    <context:property-placeholder location="db.properties"></context:property-placeholder>
+    <!--配置事务管理器-->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--开启事务驱动，即对事务相关的注解进行扫描，解析含义并执行功能-->
+    <tx:annotation-driven transaction-manager="dataSourceTransactionManager"/>
+    <!--使用jdbcTemplate操作数据库,注册bean-->
+    <!--  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+      </bean>-->
 
+    <!--配置SqlSessionFactory,加载Mybatis的全局配置文件及扫描mapper文件-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--加载Mybatis全局配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!--扫描mapper文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
 
-  <!--数据库连接池，以下几个属性名一定要写正确！！！！！！！！！！！！-->
-  <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
-    <property name="driverClassName" value="${jdbc.driver}"></property>
-    <property name="url" value="${jdbc.url}"></property>
-    <property name="username" value="${jdbc.username}"></property>
-    <property name="password" value="${jdbc.password}"></property>
-  </bean>
-  <!--加载数据库配置文件-->
-  <!--  <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-      <property name="location" value="db.properties"></property>
-    </bean>-->
-  <context:property-placeholder location="db.properties"></context:property-placeholder>
-  <!--配置事务管理器-->
-  <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-    <property name="dataSource" ref="dataSource"></property>
-  </bean>
-  <!--开启事务驱动，即对事务相关的注解进行扫描，解析含义并执行功能-->
-  <tx:annotation-driven transaction-manager="dataSourceTransactionManager"/>
-  <!--使用jdbcTemplate操作数据库,注册bean-->
-  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-    <property name="dataSource" ref="dataSource"></property>
-  </bean>
+    <!--扫描所有的mapper接口，让mapp文件能自动注入，重要！！！-->
+    <mybatis-spring:scan base-package="com.athome.mybatis.mapper"></mybatis-spring:scan>
+
 </beans>

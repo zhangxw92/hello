@@ -24,7 +24,7 @@
   </environments>
 
   <!--映射器-->
-  <mappers>
+<!--  <mappers>
     <mapper resource="mapper/BlogMapper.xml"/>
-  </mappers>
+  </mappers>-->
 </configuration>

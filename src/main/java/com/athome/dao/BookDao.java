@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
  * @Dat 2020-11-14 17:27
  * @Describe
  */
-@Repository
 public class BookDao {
 
     @Autowired

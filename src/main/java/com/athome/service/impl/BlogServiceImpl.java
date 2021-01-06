@@ -5,6 +5,7 @@ import com.athome.dao.BookDao;
 import com.athome.exception.MyException;
 import com.athome.mybatis.mapper.BlogExpMapper;
 import com.athome.pojo.Blog;
+import com.athome.pojo.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,13 +21,24 @@ public class BlogServiceImpl {
 
     @Autowired
     private BlogExpMapper blogExpMapper;
+    @Autowired
+    private BookServiceImpl bookService;
 
 
-    @Transactional
-    public void save(Blog blog) throws MyException {
+    //@Transactional(propagation = Propagation.REQUIRED)
+    public void save() {
 
-        blogExpMapper.save(blog);
+        Blog blog1 = new Blog();
+        blog1.setIdNo("123");
+        blog1.setName("123");
+        blogExpMapper.save(blog1);
 
-        throw new RuntimeException("回滚");
+        Book book = new Book();
+        book.setName("ceshi");
+        book.setTotal(10);
+        bookService.save(book);
+
+
+        //int i = 10 / 0;
     }
 }

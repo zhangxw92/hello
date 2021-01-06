@@ -3,6 +3,8 @@ package com.athome.service.impl;
 import com.athome.dao.AccountDao;
 import com.athome.dao.BookDao;
 import com.athome.exception.MyException;
+import com.athome.mybatis.mapper.BookExpMapper;
+import com.athome.pojo.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,13 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
  * @Describe
  */
 @Service
-@Transactional
 public class BookServiceImpl {
-//    @Autowired
+    //    @Autowired
 //    private AccountDao accountDao;
 //    @Autowired
 //    private BookDao bookDao;
+    @Autowired
+    private BookExpMapper bookExpMapper;
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void save(Book book) {
+        bookExpMapper.save(book);
+        int i = 10 / 0;
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void buy(Integer bookId) {

@@ -25,7 +25,7 @@ public class BlogServiceImpl {
     private BookServiceImpl bookService;
 
 
-    //@Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public void save() {
 
         Blog blog1 = new Blog();
@@ -37,7 +37,6 @@ public class BlogServiceImpl {
         book.setName("ceshi");
         book.setTotal(10);
         bookService.save(book);
-
 
         //int i = 10 / 0;
     }

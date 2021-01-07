@@ -24,7 +24,7 @@ public class BookServiceImpl {
     @Autowired
     private BookExpMapper bookExpMapper;
 
-    @Transactional(propagation = Propagation.SUPPORTS)
+    //@Transactional(propagation = Propagation.NESTED)
     public void save(Book book) {
         bookExpMapper.save(book);
         int i = 10 / 0;

@@ -1,6 +1,8 @@
 package com.athome.test;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.athome.Hello;
+import com.athome.pojo.HellWorld;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -12,7 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TestSpring {
     public static void main(String[] args) {
         ApplicationContext ct = new ClassPathXmlApplicationContext("applicationContext.xml");
-        DruidDataSource dataSource = ct.getBean("dataSource", DruidDataSource.class);
+        HellWorld dataSource = ct.getBean("helloWorld", HellWorld.class);
         System.out.println(dataSource);
     }
 }
